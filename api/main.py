@@ -5,7 +5,6 @@ import jwt
 from typing import Optional
 
 from fastapi.security import OAuth2PasswordBearer 
-
 import shelve
 from pydantic import BaseModel
 from pydantic.fields import Undefined
