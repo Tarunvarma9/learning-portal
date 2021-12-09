@@ -8,7 +8,9 @@ from sharedlibrary.database import SessionLocal, engine
 from typing import Optional
 from jose import JWTError, jwt
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -56,7 +58,6 @@ pwd_context= CryptContext(schemes=["bcrypt"],deprecated='auto')
 
 @app.get("/users_details/")
 def read_users(db: Session = Depends(get_db)):
-    # users = crud.get_users(db, skip=skip, limit=limit)
     usersDetails = db.query(models.User).all()
     return usersDetails
 
@@ -103,14 +104,18 @@ def create_user(request:schemas.User,db: Session = Depends(get_db)):
 
 @app.post('/login')
 def login(request:schemas.Data,db:Session= Depends(get_db)):
-    
     current_user=db.query(models.User).filter(models.User.user_name == request.user_name).first()
     hashedPassword = current_user.password
-    
     is_valid=pwd_context.verify(request.password, hashedPassword)
     if is_valid:
         access_token = create_access_token(data={"sub": current_user.user_name})
         return{"access_token":access_token, "token_type":"bearer"}
-        
     return "user not found"
-    
+
+
+# class Test():
+#     user: str
+
+# @app.post("/test")
+# def test(user:Test):
+    # return user

@@ -19,15 +19,15 @@ class LoginForm extends Component {
     this.setState({ password: event.target.value });
   };
 
-  onSubmitSuccess = (jwtToken) => {
-    const { history } = this.props;
+//   onSubmitSuccess = (jwtToken) => {
+//     const { history } = this.props;
 
-    Cookies.set("jwt_token", jwtToken, {
-      expires: 30,
-      path: "/",
-    });
-    history.replace("/");
-  };
+//     Cookies.set("jwt_token", jwtToken, {
+//       expires: 30,
+//       path: "/",
+//     });
+//     history.replace("/");
+//   };
 
   onSubmitFailure = (errorMsg) => {
     console.log(errorMsg);
@@ -43,18 +43,18 @@ class LoginForm extends Component {
     const url = "http://127.0.0.1:8000/login";
     const options = {
       method: "POST",
-      headers: {"Content_type": "application/json"},
-      body: JSON.stringify(userDetails),
+      headers: {"Content-Type": "application/json"},
+      body: `{"user_name":"santosh","password":"santosh@123"}`
     };
     console.log(options);
     const response = await fetch(url, options);
     const data = await response.json();
     console.log(data)
-    if (response.ok === true) {
-      this.onSubmitSuccess(data.jwt_token);
-    } else {
-      this.onSubmitFailure(data.error_msg);
-    }
+    // if (response.ok === true) {
+    //   this.onSubmitSuccess(data.jwt_token);
+    // } else {
+    //   this.onSubmitFailure(data.error_msg);
+    // }
   };
 
   renderPasswordField = () => {
@@ -97,10 +97,10 @@ class LoginForm extends Component {
 
   render() {
     const { showSubmitError, errorMsg } = this.state;
-    const jwtToken = Cookies.get("jwt_token");
-    if (jwtToken !== undefined) {
-      return <Navigate to="/" />;
-    }
+    // const jwtToken = Cookies.get("jwt_token");
+    // if (jwtToken !== undefined) {
+    //   return <Navigate to="/" />;
+    // }
     return (
       <div className="login-form-container">
         <img
