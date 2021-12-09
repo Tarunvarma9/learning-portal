@@ -36,16 +36,20 @@ class LoginForm extends Component {
 
   submitForm = async (event) => {
     event.preventDefault();
+    
     const { username, password } = this.state;
-    const userDetails = { username, password };
-    const url = "https://apis.ccbp.in/login";
+    const user_name =username
+    const userDetails = { user_name, password };
+    const url = "http://127.0.0.1:8000/login";
     const options = {
       method: "POST",
+      headers: {"Content_type": "application/json"},
       body: JSON.stringify(userDetails),
     };
     console.log(options);
     const response = await fetch(url, options);
     const data = await response.json();
+    console.log(data)
     if (response.ok === true) {
       this.onSubmitSuccess(data.jwt_token);
     } else {
