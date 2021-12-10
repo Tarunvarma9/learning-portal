@@ -13,7 +13,7 @@ function App() {
     <Routes>
       <Route exact path='/' element={<Dashboard/>}/>
       <Route exact path='/login' element={<LoginForm/>}/>
-      <Route exact path='/profile' element={<Profile/>}/>
+      {/* <Route exact path='/profile' element={<Profile/>}/> */}
     </Routes>
     </Router>
   );

@@ -1,4 +1,4 @@
-import * as React from "react";
+import  React,{useState} from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -6,11 +6,12 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import { Button } from "@mui/material";
 import AddShoppingCartSharpIcon from "@mui/icons-material/AddShoppingCartSharp";
 import { Link } from 'react-router-dom';
+import Cookies from "js-cookie";
+import history from "../history";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -45,7 +46,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
-    [theme.breakpoints.up("sm")]: {
+     [theme.breakpoints.up("sm")]: {
       width: "12ch",
       "&:focus": {
         width: "20ch",
@@ -55,6 +56,20 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function SearchAppBar() {
+
+    const [filter, setFilter] = useState("")
+
+
+    const searchText = event => {
+        setFilter(event.target.value)
+      }
+
+     const onLogOut = ()=>{
+         Cookies.remove("jwt_token")
+         history.replace('/login')
+         history.go(0)
+     }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -82,15 +97,13 @@ export default function SearchAppBar() {
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
+              onChange={searchText}
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
-        
-            <Link to='/login' style={{textDecoration:'none', fontSize:'2rem', marginLeft:'40px'}}>   
-           <Button style={{color:'#fff'}}>
-              Login/Signup
+           <Button style={{color:'#fff'}} onClick={onLogOut}>
+              Logout
            </Button>
-           </Link>
         </Toolbar>
       </AppBar>
     </Box>

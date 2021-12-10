@@ -5,7 +5,13 @@ import { Card, CardContent, CardMedia, Grid} from "@mui/material"
 import AddShoppingCartSharpIcon from "@mui/icons-material/AddShoppingCartSharp";
 import IconButton from "@mui/material/IconButton";
 import CardActionArea from '@mui/material/CardActionArea';
+import Cookies from 'js-cookie';
+import {Navigate} from 'react-router-dom'
 function Dashboard() {
+    const jwtToken = Cookies.get("jwt_token")
+    if (jwtToken === undefined){
+        return <Navigate to ="/login"/>
+    }
     return (<>
     <SearchAppBar/>
         <div>
@@ -52,7 +58,7 @@ function Dashboard() {
                  <Card style={{ height: "20rem",}}>
                    <CardMedia>
                        <img
-                       src='https://www.gcreddy.com/wp-content/uploads/2021/05/Java-Programming-Language.png'
+                       src='https://www.zdnet.com/a/img/resize/486cac744ae56e20951ec73a2ebbcb8c7c2ec454/2014/10/05/36793eae-4c32-11e4-b6a0-d4ae52e95e57/java-logo.jpg?width=1200&height=675&fit=crop&auto=webp'
                     style={{height:'10rem', width:'100%'}}
                     />
                    </CardMedia>
@@ -70,12 +76,12 @@ function Dashboard() {
                  <Card style={{ height: "20rem",}}>
                    <CardMedia>
                        <img
-                       src='https://www.mobinius.com/wp-content/uploads/2020/02/reactjs-2.png'
+                       src='https://allcode.com/wp-content/uploads/2021/02/Group-169-3.png'
                     style={{height:'10rem', width:'100%'}}
                     />
                    </CardMedia>
                    <CardContent>
-                       ReactJS
+                       AWS
                    </CardContent>
                    <CardActionArea>
                        <IconButton>
@@ -88,12 +94,12 @@ function Dashboard() {
                  <Card style={{ height: "20rem",}}>
                    <CardMedia>
                        <img
-                       src='https://www.mobinius.com/wp-content/uploads/2020/02/reactjs-2.png'
+                       src='https://www.bmwgroup.com/en/innovation/technologie-und-mobilitaet/artificial-intelligence/_jcr_content/sectioncontainer/sectionparsys/layoutcontainer/layoutcontainercontent/youtube.img.jpeg/1602156939336.jpeg'
                     style={{height:'10rem', width:'100%'}}
                     />
                    </CardMedia>
                    <CardContent>
-                       ReactJS
+                       AI
                    </CardContent>
                    <CardActionArea>
                        <IconButton>
@@ -106,12 +112,12 @@ function Dashboard() {
                  <Card style={{ height: "20rem"}}>
                    <CardMedia>
                        <img
-                       src='https://www.mobinius.com/wp-content/uploads/2020/02/reactjs-2.png'
+                       src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa-Bf-nKgtca80IoYP9ihO2mMTxryzKOJrCA&usqp=CAU'
                     style={{height:'10rem', width:'100%'}}
                     />
                    </CardMedia>
                    <CardContent>
-                       ReactJS
+                       R Programming
                    </CardContent>
                    <CardActionArea>
                        <IconButton>

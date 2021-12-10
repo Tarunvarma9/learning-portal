@@ -28,7 +28,7 @@ class LoginForm extends Component {
       expires: 30,
       path: "/",
     });
-    history.replace("/profile");
+    history.replace("/");
     history.go(0)
   };
 
