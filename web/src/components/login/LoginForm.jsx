@@ -2,6 +2,7 @@ import { Component } from "react";
 import Cookies from "js-cookie";
 import { Navigate } from "react-router-dom";
 import "./Login.css";
+import history from '../history'
 
 class LoginForm extends Component {
   state = {
@@ -11,6 +12,7 @@ class LoginForm extends Component {
     errorMsg: "",
   };
 
+
   onChangeUsername = (event) => {
     this.setState({ username: event.target.value });
   };
@@ -19,15 +21,16 @@ class LoginForm extends Component {
     this.setState({ password: event.target.value });
   };
 
-//   onSubmitSuccess = (jwtToken) => {
-//     const { history } = this.props;
+  onSubmitSuccess = (jwtToken) => {
+    // const { history } = this.props;
 
-//     Cookies.set("jwt_token", jwtToken, {
-//       expires: 30,
-//       path: "/",
-//     });
-//     history.replace("/");
-//   };
+    Cookies.set("jwt_token", jwtToken, {
+      expires: 30,
+      path: "/",
+    });
+    history.replace("/profile");
+    history.go(0)
+  };
 
   onSubmitFailure = (errorMsg) => {
     console.log(errorMsg);
@@ -44,17 +47,17 @@ class LoginForm extends Component {
     const options = {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: `{"user_name":"santosh","password":"santosh@123"}`
+      body: JSON.stringify(userDetails)
     };
     console.log(options);
     const response = await fetch(url, options);
     const data = await response.json();
     console.log(data)
-    // if (response.ok === true) {
-    //   this.onSubmitSuccess(data.jwt_token);
-    // } else {
-    //   this.onSubmitFailure(data.error_msg);
-    // }
+    if (response.ok === true) {
+      this.onSubmitSuccess(data.access_token);
+    } else {
+      this.onSubmitFailure(data.error_msg);
+    }
   };
 
   renderPasswordField = () => {
@@ -97,10 +100,10 @@ class LoginForm extends Component {
 
   render() {
     const { showSubmitError, errorMsg } = this.state;
-    // const jwtToken = Cookies.get("jwt_token");
-    // if (jwtToken !== undefined) {
-    //   return <Navigate to="/" />;
-    // }
+    const jwtToken = Cookies.get("jwt_token");
+    if (jwtToken !== undefined) {
+      return <Navigate to="/profile" />;
+    }
     return (
       <div className="login-form-container">
         <img
