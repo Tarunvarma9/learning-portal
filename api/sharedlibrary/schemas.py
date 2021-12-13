@@ -24,3 +24,11 @@ class Token(BaseModel):
     jwt_token:str
     class Config:
         orm_mode = True
+
+class CousreData(BaseModel):
+    cousre_name: str
+    image_url: str
+    price: str
+    rating: str
+    class Config:
+        orm_mode = True

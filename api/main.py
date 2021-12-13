@@ -1,7 +1,9 @@
+from os import SEEK_END
 from typing import List
 from fastapi import Depends, FastAPI, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, session
 from passlib.context import CryptContext
+from sqlalchemy.sql.functions import mode
 from sharedlibrary import crud,models, schemas
 from datetime import datetime, timedelta 
 from sharedlibrary.database import SessionLocal, engine
@@ -112,10 +114,15 @@ def login(request:schemas.Data,db:Session= Depends(get_db)):
         return{"access_token":access_token, "token_type":"bearer"}
     return "user not found"
 
+@app.post("/course")
+def create(request:schemas.CousreData,db:Session=Depends(get_db)):
+    new_course= models.Course(course_name=request.cousre_name,image_url=request.image_url,price=request.price,rating=request.rating)
+    db.add(new_course)
+    db.commit()
+    db.refresh(new_course)
+    return new_course
 
-# class Test():
-#     user: str
-
-# @app.post("/test")
-# def test(user:Test):
-    # return user
+@app.get("/course")
+def get_course(db:Session=Depends(get_db)):
+    courses=db.query(models.Course).all()
+    return courses
