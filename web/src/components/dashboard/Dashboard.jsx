@@ -10,7 +10,8 @@ import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles(() => ({
   grid: {
- border:'1px solid black'
+    padding:'30px 1%',
+    // background:'#95D6F9',
   },
   card: {
     width: "100%",
@@ -29,10 +30,23 @@ const useStyles = makeStyles(() => ({
       boxShadow: "4.0px 8.0px 8.0px hsl(0deg 0% 0% / 0.38)",
     },
   },
+  search: {
+    height: "40px",
+    width: "50%",
+    padding: "20px",
+    margin: "20px 25px",
+    border: "1px solid",
+    color: "#000",
+    fontSize: "18px",
+    fontFamily: "'Courier New', Courier, monospace",
+    fontWeight: "normal",
+    borderRadius:'20px',
+  },
 }));
 
 function Dashboard() {
-  const [cousre, setCourse] = useState([]);
+  const [course, setCourse] = useState([]);
+  const [searchInput, changeSearchInput] = useState("");
   const classes = useStyles();
   useEffect(() => {
     fetch("http://127.0.0.1:8000/course")
@@ -43,7 +57,15 @@ function Dashboard() {
         setCourse(data);
       });
   }, []);
-  console.log(cousre);
+  console.log(course);
+
+  const changeValue = (e) => {
+    changeSearchInput(e.target.value);
+  };
+
+  const filteredCourses = course.filter((cors) =>
+    cors.course_name.toLowerCase().includes(searchInput.toLowerCase())
+  );
 
   const jwtToken = Cookies.get("jwt_token");
   if (jwtToken === undefined) {
@@ -53,49 +75,58 @@ function Dashboard() {
   return (
     <>
       <SearchAppBar />
+      <div style={{background:'#95D6F9',marginTop:'-21px',paddingTop:'20px'}}>
       <div>
         <h1 style={{ textAlign: "center", fontWeight: "700" }}>
           REACT-FAST_API-COURSES-DASHBOARD
         </h1>
       </div>
-      <Grid container spacing={2} className={classes.grid} >
-      {cousre.map((cod, index) => {
-        console.log(cod);
-        return (
+      <div style={{display:'flex', justifyContent:'center'}}>
+        <input
+          placeholder="Search by Course name..."
+          className={classes.search}
+          type="search"
+          onChange={changeValue}
+        />
+      </div>
+      <Grid container spacing={2} className={classes.grid}>
+        {filteredCourses.map((cod, index) => {
+          console.log(cod);
+          return (
             <Grid
               item
               xs={12}
               sm={6}
               md={4}
-              style={{ padding: "0px 5%", marginBottom: "20px"}}
+              style={{ padding: "0px 5%", marginBottom: "20px" }}
               key={index.id}
-             >
-              
-                <Card style={{ height: "100%" }} className={classes.card} >
-                  <CardMedia>
-                    <img
-                      src={cod.image_url}
-                      style={{ height: "10rem", width: "100%" }}
-                    />
-                  </CardMedia>
-                  <CardContent>
-                    <h3>
-                      <b>{cod.course_name}</b>
-                    </h3>
-                    <h5>{cod.price}</h5>
-                    <p>{cod.rating}</p>
-                  </CardContent>
-                  <CardActionArea>
-                    <IconButton>
-                      <AddShoppingCartSharpIcon />
-                    </IconButton>
-                  </CardActionArea>
-                </Card>
+            >
+              <Card style={{ height: "100%" }} className={classes.card}>
+                <CardMedia>
+                  <img
+                    src={cod.image_url}
+                    style={{ height: "7rem", width: "17rem",padding:'10px 10px' }}
+                  />
+                </CardMedia>
+                <CardContent>
+                  <h3 style={{textAlign:'center'}}>
+                    <b>{cod.course_name}</b>
+                  </h3>
+                  <hr style={{ height: "0.5px", width: "150px" }} />
+                  <h5><b>Price :</b>${' '}{cod.price}</h5>
+                  <p><b>Rating :</b>{' '}{cod.rating}/5</p>
+                </CardContent>
+                <CardActionArea style={{padding:'0px 3%'}}>
+                  <IconButton>
+                    <AddShoppingCartSharpIcon />
+                  </IconButton>
+                </CardActionArea>
+              </Card>
             </Grid>
-          
-        );
-      })}
+          );
+        })}
       </Grid>
+      </div> 
     </>
   );
 }

@@ -74,7 +74,7 @@ export default function SearchAppBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
         position="static"
-        style={{ background: "#0974AF ", height: "10vh", padding: "0px 10%" }}
+        style={{ background: "#0974AF ", height: "11vh", padding: "0px 10%" }}
       >
         <Toolbar>
           <Typography
@@ -83,24 +83,16 @@ export default function SearchAppBar() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            UnAcademy
+            Code.
           </Typography>
           <div style={{ display: "flex", gap: "10rem" }}>
-            <Button style={{ color: "#fff" }}>courses</Button>
-            <IconButton style={{ color: "#fff", marginRight: "100px" }}>
+            {/* <Button style={{ color: "#fff" }}>courses</Button> */}
+         <Link to='/cart'>
+         <IconButton style={{ color: "#fff", marginRight: "100px" }}>
               <AddShoppingCartSharpIcon />
             </IconButton>
+         </Link>
           </div>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              onChange={searchText}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
            <Button style={{color:'#fff'}} onClick={onLogOut}>
               Logout
            </Button>
