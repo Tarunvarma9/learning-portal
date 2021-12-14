@@ -23,3 +23,13 @@ class Course(Base):
     image_url=Column(String)
     price=Column(String)
     rating=Column(String)
+
+class Favourite(Base):
+     __tablename__ = 'favourite'  
+     id = Column(Integer, primary_key=True, index=True)
+     course_id = Column(Integer)
+     user_id=Column(Integer)
+     course_name= Column(String)
+     image_url=Column(String)
+     price=Column(String)
+     rating=Column(String)

@@ -8,8 +8,9 @@ import history from './components/history';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import Dashboard from './components/dashboard/Dashboard';
 import Cart from './components/dashboard/Cart';
+import CardFlippy from './components/dashboard/CardFlippy';
 function App() {
-  return (
+  return (<>
     <Router>
     <Routes>
       <Route exact path='/' element={<Dashboard/>}/>
@@ -17,6 +18,8 @@ function App() {
       <Route exact path='/cart' element={<Cart/>}/>
     </Routes>
     </Router>
+    {/* <CardFlippy/> */}
+    </>
   );
 }
 

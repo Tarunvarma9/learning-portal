@@ -4,6 +4,7 @@ from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session, session
 from passlib.context import CryptContext
 from sqlalchemy.sql.functions import mode
+from sharedlibrary.models import Favourite
 from sharedlibrary import crud,models, schemas
 from datetime import datetime, timedelta 
 from sharedlibrary.database import SessionLocal, engine
@@ -126,3 +127,17 @@ def create(request:schemas.CousreData,db:Session=Depends(get_db)):
 def get_course(db:Session=Depends(get_db)):
     courses=db.query(models.Course).all()
     return courses
+
+@app.post("/favourite")
+def create(request:schemas.FavouriteData,db:Session=Depends(get_db)):
+    add_fav= models.Favourite(course_id=request.course_id,user_id=request.user_id,course_name=request.cousre_name,image_url=request.image_url,price=request.price,rating=request.rating)
+    db.add(add_fav)
+    db.commit()
+    db.refresh(add_fav)
+    return add_fav
+
+@app.get("/favourite")
+def get_fav(db:Session=Depends(get_db)):
+    favourites=db.query(models.Favourite).all()
+    return favourites
+

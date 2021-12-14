@@ -7,12 +7,16 @@ import CardActionArea from "@mui/material/CardActionArea";
 import Cookies from "js-cookie";
 import { Navigate } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
+import { Link } from "react-router-dom";
+import { LinearProgress } from "@mui/material";
+import Tooltip from '@mui/material/Tooltip';
+import Cart from "./Cart";
 
 const useStyles = makeStyles(() => ({
   grid: {
-    padding:'30px 1%',
-    // background:'#95D6F9',
-  },
+    padding: "30px 5%",
+
+    },
   card: {
     width: "100%",
     textAlign: "left",
@@ -40,7 +44,7 @@ const useStyles = makeStyles(() => ({
     fontSize: "18px",
     fontFamily: "'Courier New', Courier, monospace",
     fontWeight: "normal",
-    borderRadius:'20px',
+    borderRadius: "20px",
   },
 }));
 
@@ -75,58 +79,77 @@ function Dashboard() {
   return (
     <>
       <SearchAppBar />
-      <div style={{background:'#95D6F9',marginTop:'-21px',paddingTop:'20px'}}>
-      <div>
-        <h1 style={{ textAlign: "center", fontWeight: "700" }}>
-          REACT-FAST_API-COURSES-DASHBOARD
-        </h1>
+      <div
+        style={{
+          background: "#95D6F9",
+          marginTop: "-21px",
+          paddingTop: "20px",
+        }}
+      >
+        <div>
+          <h1 style={{ textAlign: "center", fontWeight: "700",color:'#fff' }}>
+            REACT-FAST_API&nbsp;/&nbsp;COURSES-DASHBOARD
+          </h1>
+        </div>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <input
+            placeholder="Search by Course name..."
+            className={classes.search}
+            type="search"
+            onChange={changeValue}
+          />
+        </div>
+        <Grid container spacing={1} className={classes.grid}>
+          {filteredCourses.map((cod, index) => {
+            console.log(cod);
+            return (
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                style={{ padding: "0px 5%", marginBottom: "20px" }}
+                key={index.id}
+              >
+                <Card style={{ height: "100%", borderRadius:'20px' }} className={classes.card}>
+                  <CardMedia>
+                    <img
+                      src={cod.image_url}
+                      style={{
+                        height: "8rem",
+                        width: "15.5rem",
+                        padding: "10px 10px",
+                        borderRadius:'20px',
+                      }}
+                    />
+                  </CardMedia>
+                  <CardContent>
+                    <h3 style={{ textAlign: "center" }}>
+                      <b>{cod.course_name}</b>
+                    </h3>
+                    <hr style={{ height: "0.5px", width: "100%" }} />
+                    <h4>
+                      <b>Price :</b>{' '}$ {cod.price}
+                    </h4>
+                    <p>
+                      <b>Rating :</b>{' '} {cod.rating}/5
+                    </p>
+                  </CardContent>
+                  <CardActionArea style={{ padding: "0px 3%" }}>
+                    <Link to={`/cart`}>
+                      <Tooltip title='Add to cart' arrow>
+                      <IconButton>
+                        <AddShoppingCartSharpIcon />
+                      </IconButton>
+                      </Tooltip>
+                    </Link>
+                  </CardActionArea>
+                </Card>
+              </Grid>
+            );
+          })}
+        </Grid>
       </div>
-      <div style={{display:'flex', justifyContent:'center'}}>
-        <input
-          placeholder="Search by Course name..."
-          className={classes.search}
-          type="search"
-          onChange={changeValue}
-        />
-      </div>
-      <Grid container spacing={2} className={classes.grid}>
-        {filteredCourses.map((cod, index) => {
-          console.log(cod);
-          return (
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
-              style={{ padding: "0px 5%", marginBottom: "20px" }}
-              key={index.id}
-            >
-              <Card style={{ height: "100%" }} className={classes.card}>
-                <CardMedia>
-                  <img
-                    src={cod.image_url}
-                    style={{ height: "7rem", width: "17rem",padding:'10px 10px' }}
-                  />
-                </CardMedia>
-                <CardContent>
-                  <h3 style={{textAlign:'center'}}>
-                    <b>{cod.course_name}</b>
-                  </h3>
-                  <hr style={{ height: "0.5px", width: "150px" }} />
-                  <h5><b>Price :</b>${' '}{cod.price}</h5>
-                  <p><b>Rating :</b>{' '}{cod.rating}/5</p>
-                </CardContent>
-                <CardActionArea style={{padding:'0px 3%'}}>
-                  <IconButton>
-                    <AddShoppingCartSharpIcon />
-                  </IconButton>
-                </CardActionArea>
-              </Card>
-            </Grid>
-          );
-        })}
-      </Grid>
-      </div> 
     </>
   );
 }

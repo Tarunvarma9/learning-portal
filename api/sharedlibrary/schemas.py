@@ -32,3 +32,13 @@ class CousreData(BaseModel):
     rating: str
     class Config:
         orm_mode = True
+
+class FavouriteData(BaseModel):
+     course_id: int
+     user_id: int    
+     cousre_name: str
+     image_url: str
+     price: str
+     rating: str
+     class Config:
+        orm_mode = True   
