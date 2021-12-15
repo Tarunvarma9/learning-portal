@@ -34,11 +34,15 @@ class CousreData(BaseModel):
         orm_mode = True
 
 class FavouriteData(BaseModel):
-     course_id: int
-     user_id: int    
-     cousre_name: str
+     user_name: str   
+     course_name: str
      image_url: str
      price: str
      rating: str
      class Config:
         orm_mode = True   
+
+class Delete(BaseModel):
+    course_name: str
+    class Config:
+        orm_mode = True 

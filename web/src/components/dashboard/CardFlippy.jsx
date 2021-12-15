@@ -13,7 +13,7 @@ function CardFlippy() {
       ref={ref} // to use toggle method like ref.curret.toggle()
       // if you pass isFlipped prop component will be controlled component.
       // and other props, which will go to div
-      style={{ width: '300px', height: '300px', display:'flex', alignItems:'center' }} /// these are optional style, it is not necessary
+      style={{ width: '300px', height: '300px' }} /// these are optional style, it is not necessary
   >
     <FrontSide style={{ backgroundColor: '#41669d'}} >
       RICK <br />

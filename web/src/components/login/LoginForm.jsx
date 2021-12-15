@@ -102,7 +102,7 @@ class LoginForm extends Component {
     const { showSubmitError, errorMsg } = this.state;
     const jwtToken = Cookies.get("jwt_token");
     if (jwtToken !== undefined) {
-      return <Navigate to="/profile" />;
+      return <Navigate to="/" />;
     }
     return (
       <div className="login-form-container">

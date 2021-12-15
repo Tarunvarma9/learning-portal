@@ -27,8 +27,7 @@ class Course(Base):
 class Favourite(Base):
      __tablename__ = 'favourite'  
      id = Column(Integer, primary_key=True, index=True)
-     course_id = Column(Integer)
-     user_id=Column(Integer)
+     user_name=Column(String)
      course_name= Column(String)
      image_url=Column(String)
      price=Column(String)

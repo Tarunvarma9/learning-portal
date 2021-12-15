@@ -1,9 +1,12 @@
 from os import SEEK_END
 from typing import List
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi import security
 from sqlalchemy.orm import Session, session
 from passlib.context import CryptContext
-from sqlalchemy.sql.functions import mode
+from sqlalchemy.sql.expression import and_
+from sqlalchemy.sql.functions import mode, user
+from starlette.requests import Request
 from sharedlibrary.models import Favourite
 from sharedlibrary import crud,models, schemas
 from datetime import datetime, timedelta 
@@ -11,8 +14,10 @@ from sharedlibrary.database import SessionLocal, engine
 from typing import Optional
 from jose import JWTError, jwt
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm,HTTPBearer
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+security = HTTPBearer()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 models.Base.metadata.create_all(bind=engine)
@@ -40,7 +45,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 def create_access_token(data: dict):
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=15)
+    expire = datetime.utcnow() + timedelta(minutes=1885)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
@@ -111,7 +116,7 @@ def login(request:schemas.Data,db:Session= Depends(get_db)):
     hashedPassword = current_user.password
     is_valid=pwd_context.verify(request.password, hashedPassword)
     if is_valid:
-        access_token = create_access_token(data={"sub": current_user.user_name})
+        access_token = create_access_token(data={"user_name": current_user.user_name})
         return{"access_token":access_token, "token_type":"bearer"}
     return "user not found"
 
@@ -129,15 +134,26 @@ def get_course(db:Session=Depends(get_db)):
     return courses
 
 @app.post("/favourite")
-def create(request:schemas.FavouriteData,db:Session=Depends(get_db)):
-    add_fav= models.Favourite(course_id=request.course_id,user_id=request.user_id,course_name=request.cousre_name,image_url=request.image_url,price=request.price,rating=request.rating)
+def create(request:schemas.FavouriteData,db:Session=Depends(get_db),token:jwt=Depends(oauth2_scheme)):
+    payload = jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
+    username:str=payload.get("user_name")
+    add_fav= models.Favourite(user_name=username,course_name=request.course_name,image_url=request.image_url,price=request.price,rating=request.rating)
     db.add(add_fav)
     db.commit()
     db.refresh(add_fav)
     return add_fav
 
 @app.get("/favourite")
-def get_fav(db:Session=Depends(get_db)):
-    favourites=db.query(models.Favourite).all()
+def get_fav(db:Session=Depends(get_db),token:jwt=Depends(oauth2_scheme)):
+    payload = jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
+    username:str=payload.get("user_name")
+    favourites=db.query(models.Favourite).filter(models.Favourite.user_name == username).all()
     return favourites
 
+@app.delete("/favourite/delete")
+def del_fav(request:schemas.Delete,db:Session=Depends(get_db),token:jwt=Depends(oauth2_scheme)):
+    payload = jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
+    username:str=payload.get("user_name")
+    db.query(models.Favourite).filter(and_(models.Favourite.course_name== request.course_name,models.Favourite.user_name==username)).delete(synchronize_session=False)
+    db.commit()
+    return 'done'

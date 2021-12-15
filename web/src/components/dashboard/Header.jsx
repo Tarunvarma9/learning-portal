@@ -26,7 +26,7 @@ export default function SearchAppBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
         position="static"
-        style={{ background: "#0974AF ", height: "11vh", padding: "0px 10%" }}
+        style={{ background: "#fff", height: "11vh", padding: "0px 10%" }}
       >
         <Toolbar>
         
@@ -36,7 +36,7 @@ export default function SearchAppBar() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            <Link to='/' style={{textDecoration:"none", color:'#fff', fontWeight:'700',fontSize:'2rem'}}>
+            <Link to='/' style={{textDecoration:"none", color:'#000', fontWeight:'700',fontSize:'2rem'}}>
            <s>&nbsp;CoDelic.&nbsp;</s>
             </Link>
           </Typography>
@@ -44,12 +44,12 @@ export default function SearchAppBar() {
           <div style={{ display: "flex", gap: "10rem" }}>
             {/* <Button style={{ color: "#fff" }}>courses</Button> */}
          <Link to='/cart'>
-         <IconButton style={{ color: "#fff", marginRight: "100px" }}>
+         <IconButton  style={{ color: "#000", marginRight: "100px" }}>
               <AddShoppingCartSharpIcon />
             </IconButton>
          </Link>
           </div>
-           <Button style={{color:'#fff'}} onClick={onLogOut}>
+           <Button style={{color:'#000'}} onClick={onLogOut}>
               Logout
            </Button>
         </Toolbar>
