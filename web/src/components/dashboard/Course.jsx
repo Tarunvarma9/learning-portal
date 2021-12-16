@@ -7,7 +7,8 @@ import Cookies from "js-cookie";
 import { makeStyles } from "@mui/styles";
 import Tooltip from "@mui/material/Tooltip";
 import { useState,useEffect } from "react";
-
+import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
+import {Flash, Fade,Flip,Hinge,JackInTheBox} from "react-awesome-reveal";
 
 const useStyles = makeStyles(() => ({
   grid: {
@@ -70,6 +71,25 @@ function Course(props) {
         setCart(data);
     });
 },[])
+const getCart =()=>{
+  const myToken = Cookies.get("jwt_token");
+    console.log(myToken)
+    const options = {  
+        method: "GET",
+        headers:{
+            "Content-Type":"application/json",
+            'Access-Control-Allow-Origin':"*",
+            "Authorization": "Bearer " + myToken
+        } 
+    }
+    fetch('http://127.0.0.1:8000/favourite',options)
+    .then((response)=>{
+        return response.json()
+    })
+    .then((data)=>{
+        setCart(data);
+    });
+}
 
   const addToFav = () => {
     const url = "http://127.0.0.1:8000/favourite";
@@ -94,7 +114,7 @@ function Course(props) {
     fetch(url, options)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        getCart()
       });
   };
 
@@ -119,6 +139,7 @@ function Course(props) {
         response.json()
         ).then(data => {
             console.log(data)
+            getCart()
         })
 }
 
@@ -142,8 +163,7 @@ else{
     carte = false
 }
 
-const bgcolor = carte? "red":"#ccc"
-
+const text = carte? "Already in cart" : "Add to cart"
 
   return (
     <div>
@@ -169,7 +189,9 @@ const bgcolor = carte? "red":"#ccc"
         </CardMedia>
         <CardContent style={{ marginTop: "-20px" }}>
           <h5 style={{ textAlign: "center", fontSize: "0.7rem" }}>
-            <b>{cod.course_name}</b>
+          <JackInTheBox delay={500}>
+          <b>{cod.course_name}</b>
+          </JackInTheBox>
           </h5>
           <hr style={{ height: "0.5px", width: "100%" }} />
           <h5>
@@ -180,9 +202,11 @@ const bgcolor = carte? "red":"#ccc"
           </p>
         </CardContent>
         <CardActionArea style={{ padding: "0px 3%" }}>
-          <Tooltip title="Add to cart" arrow>
-            <IconButton onClick={clickOnIcon} style={{ fontSize: "0.6rem", background:bgcolor }}>
-              <AddShoppingCartSharpIcon />
+          <Tooltip title={text} arrow>
+            <IconButton onClick={clickOnIcon} style={{ fontSize: "0.6rem" }}>
+              {
+                carte? <RemoveShoppingCartIcon/> : <AddShoppingCartSharpIcon/>
+              }
             </IconButton>
           </Tooltip>
         </CardActionArea>

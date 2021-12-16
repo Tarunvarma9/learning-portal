@@ -51,7 +51,8 @@ const useStyles = makeStyles(() => ({
 function CartItem(props) {
     const classes = useStyles();
    
-    const {cod} =props
+    const {cod,refreshCart} =props
+    
     
    const RemoveItem=()=>{
 
@@ -74,6 +75,7 @@ function CartItem(props) {
         response.json()
         ).then(data => {
             console.log(data)
+            refreshCart()
         })
 }
 
