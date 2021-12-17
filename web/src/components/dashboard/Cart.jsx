@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SearchAppBar from "./Header";
-import { Card, CardContent, CardMedia, Grid } from "@mui/material";
-import AddShoppingCartSharpIcon from "@mui/icons-material/AddShoppingCartSharp";
-import IconButton from "@mui/material/IconButton";
-import CardActionArea from "@mui/material/CardActionArea";
 import Cookies from "js-cookie";
-import { Navigate } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";

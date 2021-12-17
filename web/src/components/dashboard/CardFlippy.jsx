@@ -10,9 +10,7 @@ function CardFlippy() {
       flipOnHover={false} // default false
       flipOnClick={true} // default false
       flipDirection="horizontal" // horizontal or vertical
-      ref={ref} // to use toggle method like ref.curret.toggle()
-      // if you pass isFlipped prop component will be controlled component.
-      // and other props, which will go to div
+      ref={ref}
       style={{ width: '300px', height: '300px' }} /// these are optional style, it is not necessary
   >
     <FrontSide style={{ backgroundColor: '#41669d'}} >

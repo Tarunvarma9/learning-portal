@@ -189,7 +189,7 @@ const text = carte? "Already in cart" : "Add to cart"
         </CardMedia>
         <CardContent style={{ marginTop: "-20px" }}>
           <h5 style={{ textAlign: "center", fontSize: "0.7rem" }}>
-          <JackInTheBox delay={500}>
+          <JackInTheBox delay={700}>
           <b>{cod.course_name}</b>
           </JackInTheBox>
           </h5>
