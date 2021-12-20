@@ -103,7 +103,7 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 @app.post('/signup')
 def create_user(request:schemas.User,db: Session = Depends(get_db)):
     hashedPassword=pwd_context.hash(request.password)
-    new_user=models.User(user_name=request.user_name, email=request.email,password=hashedPassword)
+    new_user=models.User(name=request.name, email=request.email,password=hashedPassword)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
@@ -112,11 +112,11 @@ def create_user(request:schemas.User,db: Session = Depends(get_db)):
 
 @app.post('/login')
 def login(request:schemas.Data,db:Session= Depends(get_db)):
-    current_user=db.query(models.User).filter(models.User.user_name == request.user_name).first()
+    current_user=db.query(models.User).filter(models.User.name == request.user_name).first()
     hashedPassword = current_user.password
     is_valid=pwd_context.verify(request.password, hashedPassword)
     if is_valid:
-        access_token = create_access_token(data={"user_name": current_user.user_name})
+        access_token = create_access_token(data={"user_id": current_user.id})
         return{"access_token":access_token, "token_type":"bearer"}
     return "user not found"
 
@@ -133,11 +133,11 @@ def get_course(db:Session=Depends(get_db)):
     courses=db.query(models.Course).all()
     return courses
 
-@app.post("/favourite")
-def create(request:schemas.FavouriteData,db:Session=Depends(get_db),token:jwt=Depends(oauth2_scheme)):
+@app.post("/favourite/{course_id}")
+def create(course_id: int,db:Session=Depends(get_db),token:jwt=Depends(oauth2_scheme)):
     payload = jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
-    username:str=payload.get("user_name")
-    add_fav= models.Favourite(user_name=username,course_name=request.course_name,image_url=request.image_url,price=request.price,rating=request.rating)
+    userId:str=payload.get("user_id")
+    add_fav= models.Favourite(user_id = userId, course_id = course_id)
     db.add(add_fav)
     db.commit()
     db.refresh(add_fav)
@@ -146,14 +146,14 @@ def create(request:schemas.FavouriteData,db:Session=Depends(get_db),token:jwt=De
 @app.get("/favourite")
 def get_fav(db:Session=Depends(get_db),token:jwt=Depends(oauth2_scheme)):
     payload = jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
-    username:str=payload.get("user_name")
-    favourites=db.query(models.Favourite).filter(models.Favourite.user_name == username).all()
+    user_id:int=payload.get("user_id")
+    favourites=db.query(models.Course).select_from(models.Favourite).join(models.User, models.User.id == models.Favourite.user_id).join(models.Course, models.Course.id == models.Favourite.course_id).filter(models.User.id == user_id).all()
     return favourites
 
-@app.delete("/favourite/delete")
-def del_fav(request:schemas.Delete,db:Session=Depends(get_db),token:jwt=Depends(oauth2_scheme)):
+@app.delete("/favourite/delete/{course_id}")
+def del_fav(course_id: int,db:Session=Depends(get_db),token:jwt=Depends(oauth2_scheme)):
     payload = jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
-    username:str=payload.get("user_name")
-    db.query(models.Favourite).filter(and_(models.Favourite.course_name== request.course_name,models.Favourite.user_name==username)).delete(synchronize_session=False)
+    user_id:int=payload.get("user_id")
+    db.query(models.Favourite).filter(and_(models.Favourite.course_id==course_id,models.Favourite.user_id==user_id)).delete(synchronize_session=False)
     db.commit()
     return 'done'

@@ -73,54 +73,56 @@ function Course(props) {
 },[])
 const getCart =()=>{
   const myToken = Cookies.get("jwt_token");
-    console.log(myToken)
-    const options = {  
-        method: "GET",
-        headers:{
-            "Content-Type":"application/json",
-            'Access-Control-Allow-Origin':"*",
-            "Authorization": "Bearer " + myToken
-        } 
-    }
-    fetch('http://127.0.0.1:8000/favourite',options)
-    .then((response)=>{
-        return response.json()
+  console.log(myToken);
+  const options = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      Authorization: "Bearer " + myToken,
+    },
+  };
+  fetch("http://127.0.0.1:8000/favourite", options)
+    .then((response) => {
+      return response.json();
     })
-    .then((data)=>{
-        setCart(data);
-    });
+    .then((data) => {
+      console.log(data,"done")
+      setCart(data)
+   });
 }
 
   const addToFav = () => {
-    const url = "http://127.0.0.1:8000/favourite";
+    const url = `http://127.0.0.1:8000/favourite/${cod.id}`;
     const myToken = Cookies.get("jwt_token");
-    const new_data = {
-      user_name: "",
-      course_name: cod.course_name,
-      image_url: cod.image_url,
-      price: cod.price,
-      rating: cod.rating,
-    };
+    // const new_data = {
+    //   user_name: "",
+    //   course_id:cod.id,
+    //   course_name: cod.course_name,
+    //   image_url: cod.image_url,
+    //   price: cod.price,
+    //   rating: cod.rating,
+    // };
     const options = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
         Authorization: "Bearer " + myToken,
-      },
-      body: JSON.stringify(new_data),
+      }
+      // body: JSON.stringify(new_data),
     };
-    console.log(new_data);
+    // console.log(new_data);
     fetch(url, options)
       .then((response) => response.json())
       .then((data) => {
-        getCart()
+       getCart()
       });
   };
 
   const RemoveItem=()=>{
 
-    const url = "http://127.0.0.1:8000/favourite/delete"
+    const url =`http://127.0.0.1:8000/favourite/delete/${cod.id}`
     const myToken = Cookies.get("jwt_token")
     const new_data = {"course_name": cod.course_name}
     const options = {  
@@ -134,8 +136,9 @@ const getCart =()=>{
     
         
     }
-    console.log(new_data)
-    fetch(url, options).then(response => 
+    console.log(cod, 'dd')
+
+    fetch(url,options).then(response => 
         response.json()
         ).then(data => {
             console.log(data)
@@ -144,19 +147,21 @@ const getCart =()=>{
 }
 
 const clickOnIcon =()=>{
-
-    const cartNameList = cart.map(e=>e.course_name)
-    if(cartNameList.includes(cod.course_name)){
+    console.log(cart, "not")
+    const cartNameList = cart.map(e=>e.id)
+    console.log(cartNameList)
+    if(cartNameList.includes(cod.id)){
         RemoveItem()
     }
     else{
-        addToFav()
+      addToFav()
     }
 
 }
 let carte 
-const cartNameList = cart.map(e=>e.course_name)
-if(cartNameList.includes(cod.course_name)){
+const cartNameList = cart.map(e=>e.id)
+console.log(cartNameList, cod.id, "ok")
+if(cartNameList.includes(cod.id)){
     carte = true
 }
 else{

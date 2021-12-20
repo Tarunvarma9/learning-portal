@@ -9,7 +9,7 @@ class UserBase(BaseModel):
 
 
 class User(UserBase):
-    user_name: str
+    name: str
     email: str
     password: str
     class Config:

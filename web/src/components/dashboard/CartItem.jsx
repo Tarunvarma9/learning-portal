@@ -52,11 +52,11 @@ function CartItem(props) {
     const classes = useStyles();
    
     const {cod,refreshCart} =props
-    
+  
     
    const RemoveItem=()=>{
 
-    const url = "http://127.0.0.1:8000/favourite/delete"
+    const url = `http://127.0.0.1:8000/favourite/delete/${cod.id}`
     const myToken = Cookies.get("jwt_token")
     const new_data = {"course_name": cod.course_name}
     const options = {  
